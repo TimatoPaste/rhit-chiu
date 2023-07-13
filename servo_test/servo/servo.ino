@@ -13,12 +13,12 @@ void setup() {
 void loop() {
   // put your main code here, to run repeatedly:
   Serial.println(digitalRead(1));
-  if(digitalRead(1)==HIGH){
+  //if(digitalRead(1)==HIGH){
     for(int angle = 0;angle<=180;angle++){
       myservo.write(angle);
       delay(15);//ms
     }
-  }
+  //}
 
 
 }
