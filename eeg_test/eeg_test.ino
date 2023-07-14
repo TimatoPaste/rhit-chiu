@@ -15,7 +15,7 @@ Servo myservo;
 //why does the circuit try to be infinite or burn components out if there is not enough resistance? Is it because the components have a max current that they can handle?
 //how strong is the built-in pull-up resistor?
 //what is the difference between a pull-up resistor and other types of resistors?
-current = voltage/resistance
+//current = voltage/resistance
 
 //noise happens when an incomplete circuit "bleeds" charge into the atmosphere and can cause random activation of other uncompleted circuits
 //floating (not connected) wires can get current this way, making pins read "arbitrary" values (sometimes high, sometimes low, etc)
