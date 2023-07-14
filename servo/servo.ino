@@ -18,6 +18,8 @@ int mAngle = up;
 int rAngle = up;
 int pAngle = up;
 
+bool setAngle = false;
+
 void setup() {
 
   Serial.begin(9600);
@@ -35,30 +37,35 @@ void tMove(int increment){
   if(tAngle + increment >= 0 && tAngle + increment <= 180){
     tAngle += increment;
   }
+  setAngle = true;
 }
 
 void iMove(int increment){
   if(iAngle + increment >= 0 && iAngle + increment <= 180){
     iAngle += increment;
   }
+  setAngle = true;
 }
 
 void mMove(int increment){
   if(mAngle + increment >= 0 && mAngle + increment <= 180){
     mAngle += increment;
   }
+  setAngle = true;
 }
 
 void rMove(int increment){
   if(rAngle + increment >= 0 && rAngle + increment <= 180){
     rAngle += increment;
   }
+  setAngle = true;
 }
 
 void pMove(int increment){
   if(pAngle + increment >= 0 && pAngle + increment <= 180){
     pAngle += increment;
   }
+  setAngle = true;
 }
 
 void moveAll(int increment){
@@ -67,6 +74,7 @@ void moveAll(int increment){
   mMove(increment);
   rMove(increment);
   pMove(increment);
+  setAngle = true;
 }
 
 void writeAll(int maxAngle, int angle){//thumb val is complemented
@@ -80,9 +88,9 @@ void writeAll(int maxAngle, int angle){//thumb val is complemented
 void setAll(int maxAngle, int angle){//thumb val is complemented
   tAngle = maxAngle - angle;
   iAngle = angle;
-  mAngle = angle;
   rAngle = angle;
   pAngle = angle;
+  setAngle = true;
 }
 
 void writeOpen(){
@@ -95,10 +103,12 @@ void writeClose(){
 
 void setOpen(){
   setAll(up,up);
+  setAngle = true;
 }
 
 void setClose(){
   setAll(up,down);
+  setAngle = true;
 }
 
 void update(){
@@ -109,13 +119,67 @@ void update(){
   pinky.write(pAngle);
 }
 
+//for fun
+void fingerThing(int iters, int del){
+  for(int i = 0;i < iters; i++){
+    if(i%2 == 0){
+      thumb.write(tUp);
+      delay(del);
+      index.write(up);
+      delay(del);
+      middle.write(up);
+      delay(del);
+      ring.write(up);
+      delay(del);
+      pinky.write(up);
+      delay(del);
+    }else{
+      thumb.write(tDown);
+      delay(del);
+      index.write(down);
+      delay(del);
+      middle.write(down);
+      delay(del);
+      ring.write(down);
+      delay(del);
+      pinky.write(down);
+      delay(del);
+    }
+  }
+}
+void scissor(){
+  index.write(up);
+  middle.write(up);
+  thumb.write(tDown);
+  ring.write(down);
+  pinky.write(down);
+}
+void rps(){
+  long choice = floor(random(0,3));
+  writeAll(up,down);
+  index.write(up);
+  delay(1000);
+  middle.write(up);
+  delay(1000);
+  ring.write(up);
+  delay(1000);
+  if(choice == 0){
+    writeClose();
+  }
+  else if(choice == 1){
+    writeOpen();
+  }
+  else if (choice==2){
+    scissor();
+  }
+  delay(1000);
+}
+
 void loop() {
-  
-  if(digitalRead(2) == HIGH){//check condition of pin 2
-    setClose();
+  rps();
+  if(setAngle){
+    update();
+    setAngle = false;
   }
-  else{
-    setOpen();
-  }
-  update();
+  delay(500);
 }
